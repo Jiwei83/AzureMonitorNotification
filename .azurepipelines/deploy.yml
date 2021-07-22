@@ -47,7 +47,7 @@ stages:
         azureResourceManagerConnection: 'Test Service'
         subscriptionId: '$(subscription_id)'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(resouce_group)'
+        resourceGroupName: '$(resource_group)'
         location: '$(location)'
         templateLocation: 'Linked artifact'
         csmFile: '$(Build.Repository.LocalPath)/deployment/azuredeploy.json'
