@@ -20,7 +20,6 @@ stages:
     steps:
     - task: ArchiveFiles@2
       displayName: create zip archive for function app deployment
-      workingDirectory: '$(Build.Repository.LocalPath)/function_app'
       inputs:
         rootFolderOrFile: '$(Build.Repository.LocalPath)/function_app'
         includeRootFolder: false
