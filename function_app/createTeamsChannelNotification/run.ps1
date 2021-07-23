@@ -40,6 +40,8 @@ $body = ConvertTo-Json -Depth 4 @{
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
 
+$request.body.data | convertfrom-json
+
 Write-Host $body
 
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
