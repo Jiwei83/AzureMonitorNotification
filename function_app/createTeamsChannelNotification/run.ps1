@@ -40,7 +40,7 @@ $body = ConvertTo-Json -Depth 4 @{
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
 
-$Request.body.data
+$Request.body.data.alertContext
 
 Write-Host $body
 
