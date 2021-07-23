@@ -18,28 +18,20 @@ $body = ConvertTo-Json -Depth 4 @{
                     value = "[Link]($($Request.body.data.alertContext.LinkToFilteredSearchResultsUI))"
                 },
                 @{
-                    name  = 'Search Start Time - UTC'
-                    value = $Request.body.data.alertContext.SearchIntervalStartTimeUtc
+                    name  = 'Search Fired Time - UTC'
+                    value = $Request.body.data.alertContext.firedDateTime
                 },
                 @{
-                    name  = 'Search End Time - UTC'
-                    value = $Request.body.data.alertContext.SearchIntervalEndtimeUtc
+                    name  = 'Search Resolved Time - UTC'
+                    value = $Request.body.data.alertContext.resolvedDateTime
                 },
                 @{
-                    name  = 'Query Executed'
-                    value = $Request.body.data.alertContext.SearchQuery
+                    name  = 'Condition Type'
+                    value = $Request.body.data.alertContext.conditionType
                 },
                 @{
-                    name  = 'Log Analytics Workspace ID'
-                    value = $Request.body.data.alertContext.WorkspaceId
-                },
-                @{
-                    name  = 'Query Result Count'
-                    value = $Request.body.data.alertContext.ResultCount
-                },
-                @{
-                    name  = 'Threshold'
-                    value = $Request.body.data.alertContext.Threshold
+                    name  = 'Metric Name'
+                    value = $Request.body.data.alertContext.condition.allof.metricName
                 }
             )
         }
@@ -47,8 +39,6 @@ $body = ConvertTo-Json -Depth 4 @{
 }
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
-
-Write-Host $request
 
 Write-Host $body
 
