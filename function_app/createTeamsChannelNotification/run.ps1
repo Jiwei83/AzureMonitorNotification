@@ -15,8 +15,9 @@ $body = ConvertTo-Json -Depth 4 @{
             facts = @(
                 @{
                     name  = 'Link To Search Results'
-
-                    value = "[Link](https://ms.portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/$(($Request.body.data.essentials.alertId).Replace('/', '%2f')))"
+					$url = 'https://ms.portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/'
+					$alertId = ($Request.body.data.essentials.alertId).Replace("/", "%2f")
+                    value = "[Link]($($url + $alertId))"
                 },
                 @{
                     name  = 'severity'
@@ -40,8 +41,7 @@ $body = ConvertTo-Json -Depth 4 @{
                 },
                 @{
                     name  = 'firedDateTime'
-#                   
-                    value = $(([TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTime]$Request.body.data.essentials.firedDateTime, 'Tokyo Standard Time')).ToString("yyyy-MM-ddTHH:mm:ss"))
+                    value = $Request.body.data.essentials.firedDateTime
                 },
                 @{
                     name  = 'threshold'
@@ -58,7 +58,7 @@ $body = ConvertTo-Json -Depth 4 @{
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
 
-$body
+Write-Host $body
 
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
         StatusCode = [HttpStatusCode]::OK
