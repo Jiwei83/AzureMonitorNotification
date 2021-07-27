@@ -15,9 +15,7 @@ $body = ConvertTo-Json -Depth 4 @{
             facts = @(
                 @{
                     name  = 'Link To Search Results'
-					$url = 'https://ms.portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/'
-					$alertId = ($Request.body.data.essentials.alertId).Replace("/", "%2f")
-                    value = "[Link]($($url + $alertId))"
+                    value = "[Link](https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/$(($Request.body.data.essentials.alertId).Replace('/', '%2f')))"
                 },
                 @{
                     name  = 'severity'
@@ -57,6 +55,8 @@ $body = ConvertTo-Json -Depth 4 @{
 }
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
+
+$Request.body.data.alertContext
 
 Write-Host $body
 
