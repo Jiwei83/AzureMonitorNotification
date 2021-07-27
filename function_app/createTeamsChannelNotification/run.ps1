@@ -15,8 +15,10 @@ $body = ConvertTo-Json -Depth 4 @{
             facts = @(
                 @{
                     name  = 'Link To Search Results'
-                    value = "[Link](https://portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/$(($Request.body.data.essentials.alertId).Replace('/', '%2f')))"
-                },
+					$url = "https://ms.portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/"
+					$alertId = ($Request.body.data.essentials.alertId).Replace("/", "%2f")
+                    value = "[Link]($($url + $alertId))"
+                    },
                 @{
                     name  = 'severity'
                     value = $Request.body.data.essentials.severity
