@@ -15,23 +15,41 @@ $body = ConvertTo-Json -Depth 4 @{
             facts = @(
                 @{
                     name  = 'Link To Search Results'
-                    value = "[Link]($($Request.body.data.alertContext.LinkToFilteredSearchResultsUI))"
+
+                    value = "[Link](https://ms.portal.azure.com/#blade/Microsoft_Azure_Monitoring/AlertDetailsTemplateBlade/alertId/$(($Request.body.data.essentials.alertId).Replace('/', '%2f')))"
                 },
                 @{
-                    name  = 'Search Fired Time - UTC'
-                    value = $Request.body.data.alertContext.firedDateTime
+                    name  = 'severity'
+                    value = $Request.body.data.essentials.severity
                 },
                 @{
-                    name  = 'Search Resolved Time - UTC'
-                    value = $Request.body.data.alertContext.resolvedDateTime
+                    name  = 'alertRule'
+                    value = $Request.body.data.essentials.alertRule
                 },
                 @{
-                    name  = 'Condition Type'
-                    value = $Request.body.data.alertContext.conditionType
+                    name  = 'alertId'
+                    value = $Request.body.data.essentials.alertId
                 },
                 @{
-                    name  = 'Metric Name'
-                    value = $Request.body.data.alertContext.condition.allof.metricName
+                    name  = 'monitorCondition'
+                    value = $Request.body.data.essentials.monitorCondition
+                },
+                @{
+                    name  = 'originAlertId'
+                    value = $Request.body.data.essentials.originAlertId
+                },
+                @{
+                    name  = 'firedDateTime'
+#                   
+                    value = $(([TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTime]$Request.body.data.essentials.firedDateTime, 'Tokyo Standard Time')).ToString("yyyy-MM-ddTHH:mm:ss"))
+                },
+                @{
+                    name  = 'threshold'
+                    value = $Request.body.data.alertContext.condition.allOf.threshold
+                },
+                @{
+                    name  = 'metricValue'
+                    value = $Request.body.data.alertContext.condition.allOf.metricValue
                 }
             )
         }
@@ -39,10 +57,6 @@ $body = ConvertTo-Json -Depth 4 @{
 }
 
 Invoke-RestMethod -uri $env:teams_webhook_url -Method Post -body $body -ContentType 'application/json'
-
-$Request.body.data.alertContext
-
-Write-Host $body
 
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
         StatusCode = [HttpStatusCode]::OK
